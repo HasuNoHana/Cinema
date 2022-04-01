@@ -1,29 +1,47 @@
 package com.simple.rest.simplerest.Data;
 
-import lombok.AccessLevel;
-import lombok.Data;
-
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import java.util.Objects;
 
 
-@Data
+@Getter
 @RequiredArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+@NoArgsConstructor(force = true)
 @Entity
+@Table(name = "SCREENING_ROOM")
 public class ScreeningRoom {
+
     @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private final Long id;
 
-//    @OneToMany(mappedBy = "screeningRoom")
-//    private final List<Seat> seats;
-//
-//    @OneToOne(mappedBy = "movie")
-//    private Screening screening;
+//    @OneToMany(mappedBy = "screeningRoom", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    private Set<Seat> seats;
 
+    @OneToOne(mappedBy = "screeningRoom")
+    private Screening screening;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ScreeningRoom that = (ScreeningRoom) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
 
 

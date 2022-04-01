@@ -1,7 +1,6 @@
 package com.simple.rest.simplerest;
 
-import com.simple.rest.simplerest.Data.Movie;
-import com.simple.rest.simplerest.Repositories.MovieRepository;
+import com.simple.rest.simplerest.Data.Screening;
 import com.simple.rest.simplerest.Repositories.ScreeningRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,32 +19,27 @@ import java.util.Map;
 @Log4j2
 @Controller
 public class HomeController {
-//    @Autowired
-//    public HomeController(ScreeningRepository screeningRepository) {
-//        this.screeningRepository = screeningRepository;
-//    }
-//
     @Autowired
-    private MovieRepository movieRepository;
+    public HomeController(ScreeningRepository screeningRepository) {
+        this.screeningRepository = screeningRepository;
+    }
 
-    @Autowired
-    private ScreeningRepository screeningRepository;
-//    private final ScreeningRepository screeningRepository; //TODO add as constructor parameter
+    private final ScreeningRepository screeningRepository;
 
     @RequestMapping("/")
     public String home() {
         return "home";
     }
 
-    @RequestMapping(value="/screenings", method = RequestMethod.GET)
-    public ResponseEntity<List<Movie>> getMovies(@RequestParam Map<String, String> params){
+    @RequestMapping(value = "/screenings", method = RequestMethod.GET)
+    public ResponseEntity<List<Screening>> getMovies(@RequestParam Map<String, String> params) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime startDate = LocalDateTime.parse(params.get("startDate"), formatter);
         LocalDateTime endDate = LocalDateTime.parse(params.get("endDate"), formatter);
 
-//        List<Screening> screeningsBetween = screeningRepository.getScreeningsByStartDateBetween(startDate, endDate);
+        List<Screening> screeningsBetween = screeningRepository.getScreeningsByStartDateBetween(startDate, endDate);
 
-        return new ResponseEntity("screeningsBetween", HttpStatus.OK);
+        return new ResponseEntity<>(screeningsBetween, HttpStatus.OK);
     }
 
 }

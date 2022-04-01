@@ -1,32 +1,48 @@
 package com.simple.rest.simplerest.Data;
 
-import lombok.AccessLevel;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import java.util.Objects;
+import java.util.Set;
 
-@Data
 @RequiredArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+@NoArgsConstructor(force = true)
 @Entity
-//@Table(name = "movies")
+@Getter
+@Table(name = "MOVIE")
 public class Movie {
-
     @Id
-//    @Column(name = "id")
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private final Long id;
+
+    @Column(name = "name")
     private final String name;
-    private final LocalDateTime startDate;
 
+    @OneToMany(mappedBy = "movie", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<Screening> screenings;
 
-//    @OneToMany(targetEntity = Screening.class)
-//    @OneToMany(mappedBy = "movie")
-//    private List<Screening> screenings = new ArrayList<>();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Movie movie = (Movie) o;
+        return Objects.equals(id, movie.id) && Objects.equals(name, movie.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
+    }
 
 
 //    private final Type type;

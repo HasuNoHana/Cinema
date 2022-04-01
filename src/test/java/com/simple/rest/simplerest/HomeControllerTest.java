@@ -11,7 +11,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(HomeController.class)
@@ -36,8 +39,9 @@ public class HomeControllerTest {
     @Test
     public void testGetMoveisInTimeFrame() throws Exception {
         mockMvc.perform(get("/screenings?startDate=2020-03-30 10:30&endDate=2020-03-30 11:30"))
-                .andExpect(status().isOk());
-//                .andExpect(view().name("home"));
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"))
+                .andDo(print());
     }
 
 }
